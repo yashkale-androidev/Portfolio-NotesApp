@@ -22,19 +22,16 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Alarm
-import androidx.compose.material.icons.filled.AlarmOff
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.FormatBold
-import androidx.compose.material.icons.filled.FormatItalic
-import androidx.compose.material.icons.filled.FormatListBulleted
-import androidx.compose.material.icons.filled.LocalOffer
-import androidx.compose.material.icons.filled.PushPin
-import androidx.compose.material.icons.filled.Rule
-import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Place
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Unarchive
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
@@ -63,13 +60,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myportfolionotesapp.R
 import com.example.myportfolionotesapp.features.notes.domain.model.Category
 import com.example.myportfolionotesapp.features.notes.domain.model.Tag
 import com.example.myportfolionotesapp.features.notes.presentation.viewmodel.NotesViewModel
@@ -141,9 +141,9 @@ fun AddEditNoteScreen(
                         modifier = Modifier.testTag("editor_pin_toggle")
                     ) {
                         Icon(
-                            imageVector = Icons.Default.PushPin,
+                            painter = painterResource(R.drawable.ic_push_pin),
                             contentDescription = "Pin",
-                            tint = if (isPinned) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = if (isPinned) Color(0xFFFF0000) else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     IconButton(
@@ -188,7 +188,7 @@ fun AddEditNoteScreen(
                         },
                         modifier = Modifier.testTag("editor_save_button")
                     ) {
-                        Icon(Icons.Default.Save, contentDescription = "Save Note", tint = MaterialTheme.colorScheme.primary)
+                        Icon(painter = painterResource(R.drawable.ic_save), contentDescription = "Save Note", tint = MaterialTheme.colorScheme.primary)
                     }
                 }
             )
@@ -246,7 +246,7 @@ fun AddEditNoteScreen(
                 AssistChip(
                     onClick = { showTagEditor = true },
                     label = { Text("${noteTags.size} Tags") },
-                    leadingIcon = { Icon(Icons.Default.LocalOffer, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                    leadingIcon = { Icon(painter = painterResource(R.drawable.baseline_label_24), contentDescription = null, modifier = Modifier.size(16.dp).rotate(225f)) },
                     modifier = Modifier.testTag("editor_tags_chip")
                 )
 
@@ -263,7 +263,7 @@ fun AddEditNoteScreen(
                     },
                     leadingIcon = {
                         Icon(
-                            imageVector = Icons.Default.Alarm,
+                            imageVector = Icons.Default.Notifications,
                             contentDescription = null,
                             tint = if (reminderTime != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(16.dp)
@@ -288,16 +288,16 @@ fun AddEditNoteScreen(
                 ) {
                     IconButton(onClick = { isBoldActive = !isBoldActive }) {
                         Icon(
-                            Icons.Default.FormatBold,
+                            painter = painterResource(R.drawable.ic_bold),
                             contentDescription = "Bold Toggle",
-                            tint = if (isBoldActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = if (isBoldActive) Color(0xFF0000FF) else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     IconButton(onClick = { isItalicActive = !isItalicActive }) {
                         Icon(
-                            Icons.Default.FormatItalic,
+                            painter = painterResource(R.drawable.ic_italic),
                             contentDescription = "Italic Toggle",
-                            tint = if (isItalicActive) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
+                            tint = if (isItalicActive) Color(0xFF0000FF) else MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
                     IconButton(
@@ -305,7 +305,7 @@ fun AddEditNoteScreen(
                         modifier = Modifier.testTag("format_bullet_button")
                     ) {
                         Icon(
-                            Icons.Default.FormatListBulleted,
+                            Icons.Default.List,
                             contentDescription = "Add bullet line",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -315,7 +315,7 @@ fun AddEditNoteScreen(
                         modifier = Modifier.testTag("format_todo_button")
                     ) {
                         Icon(
-                            Icons.Default.Rule,
+                            painter = painterResource(R.drawable.round_data_array_24),
                             contentDescription = "Add checkbox",
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
@@ -366,7 +366,7 @@ fun AddEditNoteScreen(
                         .testTag("editor_toggle_archive_button")
                 ) {
                     Icon(
-                        imageVector = if (isArchived) Icons.Default.Unarchive else Icons.Default.Archive,
+                        imageVector = if (isArchived) Icons.Default.Refresh else Icons.Default.Check,
                         contentDescription = null
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -554,7 +554,7 @@ fun TagEditorDialog(
                                 label = { Text("#${tag.name}") },
                                 trailingIcon = {
                                     Icon(
-                                        Icons.Default.Cancel,
+                                        Icons.Default.Close,
                                         contentDescription = "Remove tag",
                                         modifier = Modifier.size(16.dp)
                                     )
@@ -626,7 +626,7 @@ fun ReminderSchedulerDialog(
                             .fillMaxWidth()
                             .testTag("reminder_remove_button")
                     ) {
-                        Icon(Icons.Default.AlarmOff, contentDescription = null)
+                        Icon(Icons.Default.Close, contentDescription = null)
                         Spacer(modifier = Modifier.width(8.dp))
                         Text("Remove Active Reminder")
                     }

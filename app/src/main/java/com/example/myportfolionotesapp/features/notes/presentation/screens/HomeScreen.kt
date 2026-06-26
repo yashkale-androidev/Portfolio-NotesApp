@@ -24,16 +24,12 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Archive
-import androidx.compose.material.icons.filled.EditNote
-import androidx.compose.material.icons.filled.FolderOpen
-import androidx.compose.material.icons.filled.GridView
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notes
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.ViewList
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DrawerValue
@@ -61,10 +57,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.myportfolionotesapp.R
 import com.example.myportfolionotesapp.core.datastore.NotesLayout
 import com.example.myportfolionotesapp.core.design.components.NoteGridListFeed
 import com.example.myportfolionotesapp.features.notes.presentation.navigation.Screen
@@ -86,10 +84,6 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val coroutineScope = rememberCoroutineScope()
 
-    // Separate notes into Pinned and General
-    val pinnedNotes = remember(activeNotes) { activeNotes.filter { it.isPinned } }
-    val generalNotes = remember(activeNotes) { activeNotes.filter { !it.isPinned } }
-
     ModalNavigationDrawer(
         drawerState = drawerState,
         drawerContent = {
@@ -102,7 +96,7 @@ fun HomeScreen(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Icon(
-                        imageVector = Icons.Default.EditNote,
+                        imageVector = Icons.Default.Create,
                         contentDescription = null,
                         modifier = Modifier.size(36.dp),
                         tint = MaterialTheme.colorScheme.primary
@@ -119,7 +113,7 @@ fun HomeScreen(
                 Spacer(modifier = Modifier.height(12.dp))
 
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.Notes, contentDescription = null) },
+                    icon = { Icon(Icons.Default.List, contentDescription = null) },
                     label = { Text("My Notes") },
                     selected = true,
                     onClick = {
@@ -144,7 +138,7 @@ fun HomeScreen(
                 )
 
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.Archive, contentDescription = null) },
+                    icon = { Icon(painter = painterResource(R.drawable.ic_archive), contentDescription = null) },
                     label = { Text("Archive") },
                     selected = false,
                     onClick = {
@@ -159,7 +153,7 @@ fun HomeScreen(
                 )
 
                 NavigationDrawerItem(
-                    icon = { Icon(Icons.Default.FolderOpen, contentDescription = null) },
+                    icon = { Icon(painter = painterResource(R.drawable.ic_notecategory), contentDescription = null) },
                     label = { Text("Notebook Categories") },
                     selected = false,
                     onClick = {
@@ -288,7 +282,7 @@ fun HomeScreen(
                             modifier = Modifier.testTag("layout_toggle_button")
                         ) {
                             Icon(
-                                imageVector = if (layoutState == NotesLayout.GRID) Icons.Default.ViewList else Icons.Default.GridView,
+                                painter = if (layoutState == NotesLayout.GRID) painterResource(R.drawable.ic_list) else painterResource(R.drawable.ic_grid_view),
                                 contentDescription = "Toggle layout",
                                 tint = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -358,7 +352,7 @@ fun HomeScreen(
                 ) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
-                            imageVector = Icons.Default.EditNote,
+                            imageVector = Icons.Default.Create,
                             contentDescription = null,
                             modifier = Modifier.size(80.dp),
                             tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.4f)
@@ -378,66 +372,20 @@ fun HomeScreen(
                     }
                 }
             } else {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPadding)
-                ) {
-                    // Pinned notes section if notes are pinned
-                    if (pinnedNotes.isNotEmpty()) {
-                        Column(modifier = Modifier.fillMaxWidth()) {
-                            Text(
-                                text = "PINNED NOTES",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
-                            )
-                            NoteGridListFeed(
-                                notes = pinnedNotes,
-                                layout = layoutState,
-                                onNoteClick = { note ->
-                                    navController.navigate(Screen.AddEditNote.passNoteId(note.id))
-                                },
-                                onPinToggle = { note -> viewModel.togglePin(note) },
-                                onFavoriteToggle = { note -> viewModel.toggleFavorite(note) },
-                                onArchiveToggle = { note -> viewModel.toggleArchive(note) },
-                                onDuplicate = { note -> viewModel.duplicateNote(note) },
-                                onDelete = { note -> viewModel.deleteNote(note) },
-                                modifier = Modifier.weight(1f, fill = false)
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                        }
-                    }
-
-                    // Remaining Active General notes
-                    if (generalNotes.isNotEmpty()) {
-                        Column(modifier = Modifier
-                            .fillMaxWidth()
-                            .weight(1f)) {
-                            Text(
-                                text = "PERSONAL NOTEBOOK",
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Bold,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-                                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
-                            )
-                            NoteGridListFeed(
-                                notes = generalNotes,
-                                layout = layoutState,
-                                onNoteClick = { note ->
-                                    navController.navigate(Screen.AddEditNote.passNoteId(note.id))
-                                },
-                                onPinToggle = { note -> viewModel.togglePin(note) },
-                                onFavoriteToggle = { note -> viewModel.toggleFavorite(note) },
-                                onArchiveToggle = { note -> viewModel.toggleArchive(note) },
-                                onDuplicate = { note -> viewModel.duplicateNote(note) },
-                                onDelete = { note -> viewModel.deleteNote(note) }
-                            )
-                        }
-                    }
-                }
+                NoteGridListFeed(
+                    notes = activeNotes,
+                    layout = layoutState,
+                    onNoteClick = { note ->
+                        navController.navigate(Screen.AddEditNote.passNoteId(note.id))
+                    },
+                    onPinToggle = { note -> viewModel.togglePin(note) },
+                    onFavoriteToggle = { note -> viewModel.toggleFavorite(note) },
+                    onArchiveToggle = { note -> viewModel.toggleArchive(note) },
+                    onDuplicate = { note -> viewModel.duplicateNote(note) },
+                    onDelete = { note -> viewModel.deleteNote(note) },
+                    showSections = true,
+                    modifier = Modifier.padding(innerPadding)
+                )
             }
         }
     }

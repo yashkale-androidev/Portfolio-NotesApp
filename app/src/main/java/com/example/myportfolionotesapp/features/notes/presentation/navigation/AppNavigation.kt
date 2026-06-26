@@ -38,8 +38,13 @@ fun AppNavigation(viewModel: NotesViewModel) {
                     defaultValue = -1L
                 }
             )
-        ) {
-            AddEditNoteScreen(navController = navController, viewModel = viewModel)
+        ) { backStackEntry ->
+            val noteId = backStackEntry.arguments?.getLong("noteId") ?: -1L
+            AddEditNoteScreen(
+                navController = navController,
+                viewModel = viewModel,
+                noteId = noteId
+            )
         }
         composable(route = Screen.Search.route) {
             SearchScreen(navController = navController, viewModel = viewModel)

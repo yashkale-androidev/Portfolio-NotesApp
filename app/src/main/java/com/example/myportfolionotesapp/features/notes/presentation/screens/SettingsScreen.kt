@@ -127,9 +127,9 @@ fun ThemePreferenceCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val icon = when (theme) {
-                        AppTheme.LIGHT -> Icons.Default.LightMode
-                        AppTheme.DARK -> Icons.Default.DarkMode
-                        AppTheme.SYSTEM -> Icons.Default.SettingsSuggest
+                        AppTheme.LIGHT -> Icons.Default.Info
+                        AppTheme.DARK -> Icons.Default.Lock
+                        AppTheme.SYSTEM -> Icons.Default.Settings
                     }
                     Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(16.dp))
@@ -171,8 +171,8 @@ fun LayoutPreferenceCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val icon = when (layout) {
-                        NotesLayout.GRID -> Icons.Default.GridView
-                        NotesLayout.LIST -> Icons.Default.ViewList
+                        NotesLayout.GRID -> Icons.Default.Menu
+                        NotesLayout.LIST -> Icons.Default.List
                     }
                     Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(16.dp))
@@ -213,10 +213,10 @@ fun SortPreferenceCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     val icon = when (sort) {
-                        NotesSort.NEWEST_FIRST -> Icons.Default.ArrowDownward
-                        NotesSort.OLDEST_FIRST -> Icons.Default.ArrowUpward
-                        NotesSort.ALPHABETICAL -> Icons.Default.SortByAlpha
-                        NotesSort.LAST_UPDATED -> Icons.Default.History
+                        NotesSort.NEWEST_FIRST -> Icons.Default.ArrowDropDown
+                        NotesSort.OLDEST_FIRST -> Icons.Default.ArrowForward
+                        NotesSort.ALPHABETICAL -> Icons.Default.List
+                        NotesSort.LAST_UPDATED -> Icons.Default.Refresh
                     }
                     Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.width(16.dp))

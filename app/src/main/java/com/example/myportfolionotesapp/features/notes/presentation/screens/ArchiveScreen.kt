@@ -3,7 +3,7 @@ package com.example.myportfolionotesapp.features.notes.presentation.screens
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.Archive
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -12,6 +12,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myportfolionotesapp.core.design.components.NoteGridListFeed
+import com.example.myportfolionotesapp.features.notes.presentation.navigation.Screen
 import com.example.myportfolionotesapp.features.notes.presentation.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,7 +52,7 @@ fun ArchiveScreen(
             ) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Icon(
-                        imageVector = Icons.Default.Archive,
+                        imageVector = Icons.Default.Check,
                         contentDescription = null,
                         modifier = Modifier.size(72.dp),
                         tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.5f)
@@ -69,7 +70,7 @@ fun ArchiveScreen(
                 notes = archivedNotes,
                 layout = layoutState,
                 onNoteClick = { note ->
-                    navController.navigate("add_edit_note?noteId=${note.id}")
+                    navController.navigate(Screen.AddEditNote.passNoteId(note.id))
                 },
                 onPinToggle = { note -> viewModel.togglePin(note) },
                 onFavoriteToggle = { note -> viewModel.toggleFavorite(note) },

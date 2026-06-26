@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myportfolionotesapp.core.design.components.NoteGridListFeed
+import com.example.myportfolionotesapp.features.notes.presentation.navigation.Screen
 import com.example.myportfolionotesapp.features.notes.presentation.viewmodel.NotesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -175,7 +176,7 @@ fun SearchScreen(
                 layout = layoutState,
                 onNoteClick = { note ->
                     focusManager.clearFocus()
-                    navController.navigate("add_edit_note?noteId=${note.id}")
+                    navController.navigate(Screen.AddEditNote.passNoteId(note.id))
                 },
                 onPinToggle = { note -> viewModel.togglePin(note) },
                 onFavoriteToggle = { note -> viewModel.toggleFavorite(note) },
